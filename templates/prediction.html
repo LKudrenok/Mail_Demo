@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div class="banner">
+  <div class="banner-header price">
+    {% if success %}
+    Calculated price is <span>&#163; {{ price }}
+    {% else %}
+    Oops! Something went wrong
+    {% endif %}
+  </span></div>
+</div>
+
+<div class="price-back"><a href="/">Try again?</a></div>
+
+{% endblock %}

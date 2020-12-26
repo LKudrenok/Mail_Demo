@@ -1,0 +1,230 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<form method="post">
+  <div class="banner">
+    <div class="banner-header">Let's calculate optimal price for your Airbnb rental offer based on the others!<br>(but only in London)</div>
+  </div>
+
+  <div style="margin:20px 0px">Please, provide following information (required fields are marked with '*' sign)</div>
+
+  <div class="item">
+    <p>Place name *</p>
+    <input type="text" name="place_name" value="{{ request.form['place_name'] }}" required/>
+  </div>
+
+  <div class="item">
+    <p>Summary</p>
+    <textarea rows="3" name="summary"></textarea>
+  </div>
+
+  <div class="item">
+    <p>Detailed description</p>
+    <textarea rows="4" name="description"></textarea>
+  </div>
+
+  <div class="question">
+    <p>Experiences offered</p>
+    <div class="question-answer">
+      <div>
+        <input type="radio" value="romantic" id="exp_romantic" name="experiences_offered" />
+        <label for="exp_romantic" class="radio"><span>Romantic</span></label>
+      </div>
+      <div>
+        <input type="radio" value="business" id="exp_business" name="experiences_offered" />
+        <label for="exp_business" class="radio"><span>Business</span></label>
+      </div>
+      <div>
+        <input type="radio" value="family" id="exp_family" name="experiences_offered" />
+        <label for="exp_family" class="radio"><span>Family</span></label>
+      </div>
+      <div>
+        <input type="radio" value="none" id="exp_none" name="experiences_offered" checked />
+        <label for="exp_none" class="radio"><span>None</span></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <p>Neighborhood overview</p>
+    <textarea rows="2" name="neighborhood_overview"></textarea>
+  </div>
+
+  <div class="item">
+    <p>Notes</p>
+    <textarea rows="2" name="notes"></textarea>
+  </div>
+
+  <div class="item">
+    <p>House rules</p>
+    <textarea rows="2" name="house_rules"></textarea>
+  </div>
+
+  <div class="item">
+    <p>Host since *</p>
+    <input type="date" name="host_since" required/>
+    <i class="fas fa-calendar-alt"></i>
+  </div>
+
+  <div class="item">
+    <p>Host about</p>
+    <textarea rows="2" name="host_about"></textarea>
+  </div>
+
+  <div class="item">
+    <p>Neighbourhood</p>
+    <select name="neighbourhood_cleansed">
+      {% for nc in neighbourhood_cleansed %}
+      <option value="{{ nc }}">{{ nc }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="item">
+    <p>Geographical coordinates in degrees (e.g. 51.5003646652 and -0.1214328476 for Big Ben) *</p>
+    <div class="city-item">
+      <input type="text" name="latitude" placeholder="Latitude" required/>
+      <input type="text" name="longitude" placeholder="Longitude" required/>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+    <div class="item" style="width: 22%">
+      <p>Property type</p>
+      <select name="property_type">
+        {% for pt in property_type %}
+        <option value="{{ pt }}" {% if pt == "Apartment" %}selected{% endif %}>{{ pt }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="item" style="width: 22%">
+      <p>Room type</p>
+      <select name="room_type">
+        {% for rt in room_type %}
+        <option value="{{ rt }}">{{ rt }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="item" style="width: 22%">
+      <p>Bed type</p>
+      <select name="bed_type">
+        {% for bt in bed_type %}
+        <option value="{{ bt }}">{{ bt }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="item" style="width: 22%">
+      <p>Cancellation policy</p>
+      <select name="cancellation_policy">
+        {% for cp in cancellation_policy %}
+        <option value="{{ cp }}">{{ cp }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+    <div class="item">
+      <p>Accommodates</p>
+      <input type="number" name="accommodates" value="1"/>
+    </div>
+
+    <div class="item">
+      <p>Bathrooms</p>
+      <input type="number" name="bathrooms" value="1"/>
+    </div>
+
+    <div class="item">
+      <p>Bedrooms</p>
+      <input type="number" name="bedrooms" value="1"/>
+    </div>
+
+    <div class="item">
+      <p>Beds</p>
+      <input type="number" name="beds" value="1"/>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+    <div class="item" style="width: 30%">
+      <p>Guests included</p>
+      <input type="number" name="guests_included" value="1"/>
+    </div>
+
+    <div class="item" style="width: 30%">
+      <p>Extra people</p>
+      <input type="number" name="extra_people" value="0"/>
+    </div>
+
+    <div class="item" style="width: 30%">
+      <p>Minimum nights</p>
+      <input type="number" name="minimum_nights" value="1"/>
+    </div>
+  </div>
+
+  <div class="item">
+    <p>Amenities (select multiple options with 'Ctrl' ('Cmd' for Mac) key pressed)</p>
+    <select multiple="multiple" name="amenities" id="amenitiesMulti" size="12">
+      {% for a in amenities %}
+      <option value="{{ a }}">{{ a }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+    <div class="item" style="width: 45%">
+      <p>Security deposit</p>
+      <input type="number" name="security_deposit" placeholder="&#163; 0.00"/>
+    </div>
+
+    <div class="item" style="width: 45%">
+      <p>Cleaning fee</p>
+      <input type="number" name="cleaning_fee" placeholder="&#163; 0.00"/>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+    <div class="question" style="width: 45%">
+      <p>Do you require guest profile picture?</p>
+      <div class="question-answer">
+        <div>
+          <input type="radio" value="1" id="require_guest_profile_picture_true" name="require_guest_profile_picture" />
+          <label for="require_guest_profile_picture_true" class="radio"><span>Yes</span></label>
+        </div>
+        <div>
+          <input type="radio" value="0" id="require_guest_profile_picture_false" name="require_guest_profile_picture" checked/>
+          <label for="require_guest_profile_picture_false" class="radio"><span>No</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question" style="width: 45%">
+      <p>Do you require guest profile verification?</p>
+      <div class="question-answer">
+        <div>
+          <input type="radio" value="1" id="require_guest_phone_verification_true" name="require_guest_phone_verification" />
+          <label for="require_guest_phone_verification_true" class="radio"><span>Yes</span></label>
+        </div>
+        <div>
+          <input type="radio" value="0" id="require_guest_phone_verification_false" name="require_guest_phone_verification" checked/>
+          <label for="require_guest_phone_verification_false" class="radio"><span>No</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <p>If you have any reviews, provide them here (each one on a new line)</p>
+    <textarea rows="4" name="reviews"></textarea>
+  </div>
+
+  <div class="btn-block">
+    <button type="submit">CALCULATE</button>
+  </div>
+</form>
+
+{% endblock %}
